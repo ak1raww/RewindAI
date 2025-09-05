@@ -28,11 +28,11 @@ headers = {
 }
 print(f"DEBUG: HF_TOKEN in headers: {os.getenv('HF_TOKEN')[:5]}...")  # Debug token prefix (partial for security)
 
-def query(payload):
+def send_hf_request(payload):
     """
     Send a query to the Hugging Face API and return the response.
     """
-    print(f"DEBUG: query called with payload: {payload}")  # Debug payload
+    print(f"DEBUG: send_hf_request called with payload: {payload}")  # Debug payload
     try:
         response = requests.post(API_URL, headers=headers, json=payload, timeout=10)  # 10-second timeout
         print(f"DEBUG: API response status code: {response.status_code}")  # Debug status code
@@ -66,7 +66,7 @@ async def ai_command(ctx, *, query):
             ],
             "model": "meta-llama/Llama-3.1-8B-Instruct:cerebras"
         }
-        response = query(payload)
+        response = send_hf_request(payload)
 
         # Parse response to extract answer after </think> if present
         content = response["choices"][0]["message"]["content"]
